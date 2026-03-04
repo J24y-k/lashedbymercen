@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function updateDepositDisplay(price) {
-    const deposit  = Math.ceil(price / 2);
+    const deposit  = 150; // Flat R150 non-refundable deposit
     const balance  = price - deposit;
     setText('service-total',   `R${price}`);
     setText('deposit-amount',  `R${deposit}`);
@@ -389,8 +389,8 @@ document.addEventListener('DOMContentLoaded', () => {
       formattedDate = d.toLocaleDateString('en-ZA', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
     }
 
-    const deposit  = svc.price ? Math.ceil(svc.price / 2) : '—';
-    const balance  = svc.price ? (svc.price - deposit)   : '—';
+    const deposit  = 150; // Flat R150 non-refundable deposit
+    const balance  = svc.price ? (svc.price - 150) : '—';
     const ref      = bookingRef;
 
     // Build the WhatsApp message — clean, structured, professional
@@ -416,7 +416,7 @@ document.addEventListener('DOMContentLoaded', () => {
       '',
       '─── *PAYMENT* ───────────────',
       `*Total:*     R${svc.price || '—'}`,
-      `*Deposit:*   R${deposit} ← 50% required`,
+      `*Deposit:*   R150 ← non-refundable, pay immediately`,
       `*Balance:*   R${balance} (payable on the day)`,
       '',
       notes !== 'None' ? `─── *NOTES* ─────────────────\n${notes}\n` : '',
