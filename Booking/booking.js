@@ -26,14 +26,27 @@ document.addEventListener('DOMContentLoaded', () => {
   const WA_NUMBER = '27745192332';
 
   const SERVICES = {
-    'classic-full-set':    { label: 'Classic Full Set',    price: 350,  duration: '90 min'    },
-    'hybrid-full-set':     { label: 'Hybrid Full Set',     price: 550,  duration: '2 hrs'     },
-    'volume-full-set':     { label: 'Volume Full Set',     price: 700,  duration: '2.5 hrs'   },
-    'mega-volume-full-set':{ label: 'Mega Volume Full Set',price: 900,  duration: '3 hrs'     },
-    'classic-fill':        { label: 'Classic Fill',        price: 200,  duration: '45–60 min' },
-    'hybrid-fill':         { label: 'Hybrid Fill',         price: 280,  duration: '60–75 min' },
-    'volume-fill':         { label: 'Volume Fill',         price: 350,  duration: '75–90 min' },
-    'lash-lift-tint':      { label: 'Lash Lift & Tint',    price: 400,  duration: '60 min'    },
+    // Full Sets
+    'classic-full-set':        { label: 'Classic Full Set',            price: 250,  duration: '1h 30 min' },
+    'hybrid-full-set':         { label: 'Hybrid Full Set',             price: 350,  duration: '2 hours'   },
+    'hybrid-spikes-full-set':  { label: 'Hybrid x Spikes Full Set',    price: 350,  duration: '2 hours'   },
+    'wet-set':                 { label: 'Wet Set',                     price: 380,  duration: '1h 30 min' },
+    'hybrid-cat-eye':          { label: 'Hybrid Cat Eye Wispy',        price: 400,  duration: '2 hours'   },
+    'volume-full-set':         { label: 'Volume Full Set',             price: 600,  duration: '3 hours'   },
+    'mega-volume-full-set':    { label: 'Mega Volume Full Set',        price: 750,  duration: '3h 30 min' },
+    // Add-ons
+    'bottom-lashes':           { label: 'Bottom Lashes',               price: 150,  duration: 'Add-on'    },
+    'lash-removal':            { label: 'Lash Removal',                price: 150,  duration: '45 min'    },
+    // 2-Week Refills (all 1h 30 min)
+    'classic-fill':            { label: 'Classic 2-Week Refill',       price: 150,  duration: '1h 30 min' },
+    'hybrid-fill':             { label: 'Hybrid 2-Week Refill',        price: 250,  duration: '1h 30 min' },
+    'volume-fill':             { label: 'Volume 2-Week Refill',        price: 500,  duration: '1h 30 min' },
+    'hybrid-spikes-fill':      { label: 'Hybrid x Spikes Refill',      price: 290,  duration: '1h 30 min' },
+    'hybrid-cat-eye-fill':     { label: 'Hybrid Cat Eye Wispy Refill', price: 300,  duration: '1h 30 min' },
+    'wet-set-fill':            { label: 'Wet Set Refill',              price: 250,  duration: '1h 30 min' },
+    // Brows
+    'brow-lamination':         { label: 'Brow Lamination & Tint',      price: 250,  duration: '1 hour'    },
+    'brow-tint-shape':         { label: 'Brow Tint & Shape',           price: 120,  duration: '1 hour'    },
   };
 
   // ──────────────────────────────────────────────────────
@@ -382,6 +395,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const time     = document.getElementById('bf-time')?.value             || '';
     const notes    = document.getElementById('bf-notes')?.value.trim()     || 'None';
 
+    // Lash tech preference
+    const techVal  = document.querySelector('input[name="lash_tech"]:checked')?.value || 'no-preference';
+    const techLabels = { 'no-preference': 'No Preference (first available)', 'mercen': 'Mercen', 'second-tech': 'Other Tech' };
+    const techLabel = techLabels[techVal] || 'No Preference';
+
     // Format date nicely
     let formattedDate = rawDate;
     if (rawDate) {
@@ -409,6 +427,7 @@ document.addEventListener('DOMContentLoaded', () => {
       `*Name:*      ${fn} ${ln}`,
       `*WhatsApp:*  ${phone}`,
       `*Email:*     ${email}`,
+      `*Tech Pref:* ${techLabel}`,
       '',
       '─── *APPOINTMENT* ───────────',
       `*Date:*      ${formattedDate}`,

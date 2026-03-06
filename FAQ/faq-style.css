@@ -295,7 +295,7 @@ body { background: var(--black); color: var(--white); font-family: var(--font-bo
 @media (max-width: 768px) {
   :root { --nav-h: 70px; }
   .hamburger { display: flex; z-index: 10; }
-  .nav-links { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(10,10,10,.98); backdrop-filter: blur(20px); flex-direction: column; justify-content: center; align-items: center; gap: 2.5rem; transform: translateX(100%); transition: transform .4s var(--ease-out); z-index: 5; }
+  .nav-links { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(10,10,10,.98); backdrop-filter: blur(20px); flex-direction: column; justify-content: center; align-items: center; gap: 2rem; transform: translateX(100%); transition: transform .4s var(--ease-out); z-index: 5; padding: 100px 2rem 2rem; }
   .nav-links.open { transform: translateX(0); }
   .nav-link { font-size: 1rem; letter-spacing: .2em; }
   .nav-cta { padding: .75rem 2rem; }

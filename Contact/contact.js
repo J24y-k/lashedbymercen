@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let isOpen = false;
     if (day >= 1 && day <= 5 && time >= 9 && time < 18) isOpen = true; // Mon–Fri 09–18
-    if (day === 6 && time >= 9 && time < 15) isOpen = true;             // Sat 09–15
+    if (day === 6 && time >= 9 && time < 17) isOpen = true;             // Sat 09–17
 
     if (isOpen) {
       dot.classList.remove('closed');
@@ -401,3 +401,69 @@ function initFallbackReveal() {
   }, { threshold: 0.08 });
   els.forEach(el => observer.observe(el));
 }
+
+// ──────────────────────────────────────────────────────
+// SMART DIRECTIONS BUTTON
+// Logic:
+//   iOS (iPhone/iPad)  → opens Apple Maps directly (native)
+//   Android            → opens Google Maps directly (native)
+//   Desktop / other    → shows a choice panel: Google Maps · Apple Maps · Waze
+//   All deep-links use the full address string for maximum accuracy
+// ──────────────────────────────────────────────────────
+(function () {
+  const ADDRESS_QUERY  = '537+Pretoria+Road+Silverton+Pretoria+South+Africa';
+  const ADDRESS_APPLE  = '537+Pretoria+Road,Silverton,Pretoria,South+Africa';
+
+  const GOOGLE_URL = `https://www.google.com/maps/dir/?api=1&destination=${ADDRESS_QUERY}`;
+  const APPLE_URL  = `https://maps.apple.com/?daddr=${ADDRESS_APPLE}&dirflg=d`;
+  const WAZE_URL   = `https://waze.com/ul?q=${ADDRESS_QUERY}&navigate=yes`;
+
+  function isIOS() {
+    return /iP(hone|ad|od)/i.test(navigator.userAgent) ||
+           (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  }
+  function isAndroid() {
+    return /Android/i.test(navigator.userAgent);
+  }
+
+  const btn   = document.getElementById('btn-directions');
+  const panel = document.getElementById('map-choice-panel');
+
+  if (!btn) return;
+
+  btn.addEventListener('click', function (e) {
+    e.stopPropagation();
+
+    if (isIOS()) {
+      // iPhone/iPad: Apple Maps opens natively in the Maps app
+      window.location.href = APPLE_URL;
+    } else if (isAndroid()) {
+      // Android: Google Maps opens in the Maps app via intent
+      // geo: URI triggers the native picker; fallback to web URL
+      const geoIntent = `geo:-25.7335,28.2995?q=${ADDRESS_QUERY}`;
+      const start = Date.now();
+      window.location.href = geoIntent;
+      // If app didn't open within 1.5s, fall back to web Google Maps
+      setTimeout(function () {
+        if (Date.now() - start < 2000) {
+          window.open(GOOGLE_URL, '_blank');
+        }
+      }, 1500);
+    } else {
+      // Desktop / other: toggle the choice panel
+      panel.classList.toggle('hidden');
+    }
+  });
+
+  // Close panel when clicking anywhere else
+  document.addEventListener('click', function (e) {
+    if (!btn.contains(e.target) && !panel.contains(e.target)) {
+      panel.classList.add('hidden');
+    }
+  });
+
+  // Keyboard: close panel on Escape
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') panel.classList.add('hidden');
+  });
+})();
