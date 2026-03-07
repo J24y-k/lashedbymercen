@@ -19,11 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ──────────────────────────────────────────────────────
   // CONFIG
   // ──────────────────────────────────────────────────────
-
-  // ⚠️  TODO: Replace with Mercen's WhatsApp number before going live.
-  //           Format: country code + number, no + or spaces.
-  //           Current number is Jay K's test number.
-  const WA_NUMBER = '27745192332';
+  const WA_NUMBER = '27677243893';
 
   const SERVICES = {
     // Full Sets
