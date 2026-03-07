@@ -4,10 +4,10 @@
  *  - Full client-side form validation with inline errors
  *  - Character counter on message field
  *  - Live "Open / Closed" status indicator
- *  - Simulated form submission (ready for backend/Formspree/Netlify)
+ *  - WhatsApp direct form submission
  *  - GSAP reveal animations
  *  - Nav scroll, hamburger, back-to-top
- *  - Floating WhatsApp bubble show/hide
+ *  - Smart universal directions (iOS → Apple Maps, Android → Google Maps, Desktop → choice panel)
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -97,10 +97,9 @@ document.addEventListener('DOMContentLoaded', () => {
       text.textContent = 'We are open now';
     } else {
       dot.classList.add('closed');
-      // Find next open time
       const msgs = {
         0: 'Opens Monday at 09:00',
-        1: day === 1 && time >= 18 ? 'Opens tomorrow at 09:00' : 'Opens today at 09:00',
+        1: time >= 18 ? 'Opens tomorrow at 09:00' : 'Opens today at 09:00',
         2: 'Opens today at 09:00',
         3: 'Opens today at 09:00',
         4: 'Opens today at 09:00',
@@ -111,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
   updateStatus();
-  setInterval(updateStatus, 60000); // re-check every minute
+  setInterval(updateStatus, 60000);
 
   // ──────────────────────────────────────────────────────
   // 6. CHARACTER COUNTER
@@ -133,79 +132,56 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ──────────────────────────────────────────────────────
-  // 7. CONTACT FORM VALIDATION + SUBMISSION
+  // 7. CONTACT FORM VALIDATION + WHATSAPP SUBMISSION
   // ──────────────────────────────────────────────────────
-  const form       = document.getElementById('contact-form');
-  const submitBtn  = document.getElementById('submit-btn');
-  const btnText    = submitBtn?.querySelector('.btn-text');
-  const btnIcon    = submitBtn?.querySelector('.btn-icon');
-  const btnSpinner = submitBtn?.querySelector('.btn-spinner');
+  const WHATSAPP_NUMBER = '27677243893'; // Mercen's WhatsApp
+
+  const form        = document.getElementById('contact-form');
+  const submitBtn   = document.getElementById('submit-btn');
+  const btnText     = submitBtn?.querySelector('.btn-text');
+  const btnIcon     = submitBtn?.querySelector('.btn-icon');
+  const btnSpinner  = submitBtn?.querySelector('.btn-spinner');
   const formSuccess = document.getElementById('form-success');
 
   function showError(fieldId, errorId, msg) {
     const field = document.getElementById(fieldId);
     const error = document.getElementById(errorId);
-    if (field)  field.classList.add('error');
-    if (error)  error.textContent = msg;
+    if (field) field.classList.add('error');
+    if (error) error.textContent = msg;
   }
 
   function clearError(fieldId, errorId) {
     const field = document.getElementById(fieldId);
     const error = document.getElementById(errorId);
-    if (field)  field.classList.remove('error');
-    if (error)  error.textContent = '';
+    if (field) field.classList.remove('error');
+    if (error) error.textContent = '';
   }
 
   function validateForm() {
     let valid = true;
 
-    // Name
     const name = document.getElementById('cf-name')?.value.trim();
-    if (!name) {
-      showError('cf-name', 'cf-name-error', 'Please enter your name.');
-      valid = false;
-    } else {
-      clearError('cf-name', 'cf-name-error');
-    }
+    if (!name) { showError('cf-name', 'cf-name-error', 'Please enter your name.'); valid = false; }
+    else { clearError('cf-name', 'cf-name-error'); }
 
-    // Email
     const email = document.getElementById('cf-email')?.value.trim();
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email) {
-      showError('cf-email', 'cf-email-error', 'Please enter your email address.');
-      valid = false;
-    } else if (!emailRegex.test(email)) {
-      showError('cf-email', 'cf-email-error', 'Please enter a valid email address.');
-      valid = false;
-    } else {
-      clearError('cf-email', 'cf-email-error');
-    }
+    if (!email) { showError('cf-email', 'cf-email-error', 'Please enter your email address.'); valid = false; }
+    else if (!emailRegex.test(email)) { showError('cf-email', 'cf-email-error', 'Please enter a valid email address.'); valid = false; }
+    else { clearError('cf-email', 'cf-email-error'); }
 
-    // Message
     const message = document.getElementById('cf-message')?.value.trim();
-    if (!message) {
-      showError('cf-message', 'cf-message-error', 'Please enter a message.');
-      valid = false;
-    } else if (message.length < 10) {
-      showError('cf-message', 'cf-message-error', 'Message is too short — please provide more detail.');
-      valid = false;
-    } else {
-      clearError('cf-message', 'cf-message-error');
-    }
+    if (!message) { showError('cf-message', 'cf-message-error', 'Please enter a message.'); valid = false; }
+    else if (message.length < 10) { showError('cf-message', 'cf-message-error', 'Message is too short — please provide more detail.'); valid = false; }
+    else { clearError('cf-message', 'cf-message-error'); }
 
-    // Consent
     const consent = document.getElementById('cf-consent')?.checked;
-    if (!consent) {
-      document.getElementById('cf-consent-error').textContent = 'Please confirm your consent to be contacted.';
-      valid = false;
-    } else {
-      document.getElementById('cf-consent-error').textContent = '';
-    }
+    if (!consent) { document.getElementById('cf-consent-error').textContent = 'Please confirm your consent to be contacted.'; valid = false; }
+    else { document.getElementById('cf-consent-error').textContent = ''; }
 
     return valid;
   }
 
-  // Clear errors on input
   ['cf-name', 'cf-email', 'cf-message'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.addEventListener('input', () => {
@@ -223,28 +199,17 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
 
       if (!validateForm()) {
-        // Scroll to first error
         const firstError = form.querySelector('.error, input:invalid');
         if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
         return;
       }
 
-      // Loading state
       submitBtn.classList.add('loading');
       btnText.textContent = 'Sending…';
       btnIcon?.classList.add('hidden');
       btnSpinner?.classList.remove('hidden');
 
       try {
-        // ── WHATSAPP DIRECT MESSAGE SUBMISSION ─────────────────
-        // ⚠️  IMPORTANT: Replace the number below with Mercen's
-        //     WhatsApp number before going live.
-        //     Current number is Jay K's test number.
-        //     Format: country code + number, no + or spaces.
-        // ────────────────────────────────────────────────────────
-        const WHATSAPP_NUMBER = '27745192332'; // TODO: Change to Mercen's number
-
-        // Collect form values
         const clientName    = document.getElementById('cf-name')?.value.trim() || '';
         const clientPhone   = document.getElementById('cf-phone')?.value.trim() || 'Not provided';
         const clientEmail   = document.getElementById('cf-email')?.value.trim() || '';
@@ -252,7 +217,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const subjectText   = clientSubject?.options[clientSubject.selectedIndex]?.text || 'Not selected';
         const clientMessage = document.getElementById('cf-message')?.value.trim() || '';
 
-        // Build a clean, readable WhatsApp message
         const waMessage = [
           '✦ *NEW ENQUIRY — Lashed By Mercen Website*',
           '',
@@ -265,57 +229,30 @@ document.addEventListener('DOMContentLoaded', () => {
           clientMessage,
           '',
           '─────────────────────────',
-          '_Sent via lashedbymercen.co.za contact form_'
+          '_Sent via lashedbymercen.com contact form_'
         ].join('\n');
 
-        // Encode safely — encodeURIComponent handles all special chars,
-        // emojis, newlines and works identically on iOS, Android & desktop.
         const encodedMessage = encodeURIComponent(waMessage);
-
-        // Build the universal wa.me link.
-        // wa.me works on all devices — mobile opens WA app directly,
-        // desktop opens WhatsApp Web. No app-specific URI needed.
         const waURL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
 
-        // Brief intentional delay so the user sees "Sending…" feedback
         await new Promise(res => setTimeout(res, 900));
 
-        // Wire fallback button with the same URL so manual tap always works
         const fallbackBtn = document.getElementById('wa-fallback-btn');
         if (fallbackBtn) fallbackBtn.href = waURL;
 
-        // Show success state BEFORE opening WhatsApp
-        // so the user knows the action was registered
         form.classList.add('hidden');
         formSuccess.classList.remove('hidden');
         if (typeof gsap !== 'undefined') {
-          gsap.fromTo(formSuccess,
-            { opacity: 0, y: 20 },
-            { opacity: 1, y: 0, duration: .6, ease: 'power3.out' }
-          );
+          gsap.fromTo(formSuccess, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: .6, ease: 'power3.out' });
         }
 
-        // Open WhatsApp.
-        // We use window.location.href instead of window.open() because:
-        // - window.open() is blocked by iOS Safari popup blockers
-        //   when not triggered by a direct synchronous user gesture.
-        // - window.location.href works universally on all browsers & devices.
-        // - On mobile it launches the WhatsApp app directly.
-        // - On desktop it opens WhatsApp Web in the same tab, then
-        //   the browser history allows the user to navigate back.
-        //
-        // Small timeout ensures the success UI renders before redirect.
-        setTimeout(() => {
-          window.location.href = waURL;
-        }, 1200);
+        setTimeout(() => { window.location.href = waURL; }, 1200);
 
       } catch (err) {
-        // Reset button on error
         submitBtn.classList.remove('loading');
         btnText.textContent = 'Send Message';
         btnIcon?.classList.remove('hidden');
         btnSpinner?.classList.add('hidden');
-        // Friendly fallback — still give them a way to reach Mercen
         alert('Something went wrong. Please contact us directly on WhatsApp and we\'ll sort it out right away.');
         console.error('Form error:', err);
       }
@@ -334,8 +271,6 @@ document.addEventListener('DOMContentLoaded', () => {
 // GSAP ANIMATIONS
 // ──────────────────────────────────────────────────────
 function initGSAP() {
-
-  // Reveal blocks (form, info panel, etc.)
   gsap.utils.toArray('.reveal-block').forEach(el => {
     gsap.fromTo(el,
       { opacity: 0, y: 45 },
@@ -345,7 +280,6 @@ function initGSAP() {
     );
   });
 
-  // Quick contact cards — stagger
   gsap.utils.toArray('.reveal-card').forEach(el => {
     const delay = parseFloat(el.style.getPropertyValue('--i') || 0) * 0.1;
     gsap.fromTo(el,
@@ -356,19 +290,15 @@ function initGSAP() {
     );
   });
 
-  // Hero rings — pulse scale on scroll
   gsap.to('.ph-ring.r1', {
-    scale: 1.08,
-    ease: 'none',
+    scale: 1.08, ease: 'none',
     scrollTrigger: { trigger: '.page-hero', start: 'top top', end: 'bottom top', scrub: 2 }
   });
   gsap.to('.ph-ring.r2', {
-    scale: 1.05,
-    ease: 'none',
+    scale: 1.05, ease: 'none',
     scrollTrigger: { trigger: '.page-hero', start: 'top top', end: 'bottom top', scrub: 3 }
   });
 
-  // Map card: slide in from left
   const mapCard = document.querySelector('.map-overlay-card');
   if (mapCard) {
     gsap.fromTo(mapCard,
@@ -379,7 +309,6 @@ function initGSAP() {
     );
   }
 
-  // Hero background circles parallax
   gsap.to('.ph-circle.c1', {
     y: 80, ease: 'none',
     scrollTrigger: { trigger: '.page-hero', start: 'top top', end: 'bottom top', scrub: 1.5 }
@@ -387,7 +316,7 @@ function initGSAP() {
 }
 
 // ──────────────────────────────────────────────────────
-// FALLBACK
+// FALLBACK REVEAL
 // ──────────────────────────────────────────────────────
 function initFallbackReveal() {
   const els = document.querySelectorAll('.reveal-block, .reveal-card');
@@ -404,19 +333,19 @@ function initFallbackReveal() {
 
 // ──────────────────────────────────────────────────────
 // SMART DIRECTIONS BUTTON
-// Logic:
-//   iOS (iPhone/iPad)  → opens Apple Maps directly (native)
-//   Android            → opens Google Maps directly (native)
-//   Desktop / other    → shows a choice panel: Google Maps · Apple Maps · Waze
-//   All deep-links use the full address string for maximum accuracy
+// iOS (iPhone/iPad)  → Apple Maps app (native)
+// Android            → Google Maps app (native via geo: intent, fallback to web)
+// Desktop / other    → shows choice panel: Google Maps · Apple Maps · Waze
 // ──────────────────────────────────────────────────────
 (function () {
-  const ADDRESS_QUERY  = '537+Pretoria+Road+Silverton+Pretoria+South+Africa';
-  const ADDRESS_APPLE  = '537+Pretoria+Road,Silverton,Pretoria,South+Africa';
+  const ADDRESS_QUERY = '537+Pretoria+Road,Silverton,Pretoria,South+Africa';
+  const ADDRESS_APPLE = '537+Pretoria+Road,Silverton,Pretoria,South+Africa';
+  const LAT = '-25.7335';
+  const LNG = '28.2995';
 
   const GOOGLE_URL = `https://www.google.com/maps/dir/?api=1&destination=${ADDRESS_QUERY}`;
   const APPLE_URL  = `https://maps.apple.com/?daddr=${ADDRESS_APPLE}&dirflg=d`;
-  const WAZE_URL   = `https://waze.com/ul?q=${ADDRESS_QUERY}&navigate=yes`;
+  const WAZE_URL   = `https://waze.com/ul?ll=${LAT},${LNG}&navigate=yes&zoom=17`;
 
   function isIOS() {
     return /iP(hone|ad|od)/i.test(navigator.userAgent) ||
@@ -435,35 +364,36 @@ function initFallbackReveal() {
     e.stopPropagation();
 
     if (isIOS()) {
-      // iPhone/iPad: Apple Maps opens natively in the Maps app
+      // iPhone/iPad: opens Apple Maps app natively
       window.location.href = APPLE_URL;
+
     } else if (isAndroid()) {
-      // Android: Google Maps opens in the Maps app via intent
-      // geo: URI triggers the native picker; fallback to web URL
-      const geoIntent = `geo:-25.7335,28.2995?q=${ADDRESS_QUERY}`;
+      // Android: geo: URI opens the native maps picker
+      // Falls back to Google Maps web if no app catches the intent
+      const geoIntent = `geo:${LAT},${LNG}?q=${ADDRESS_QUERY}`;
       const start = Date.now();
       window.location.href = geoIntent;
-      // If app didn't open within 1.5s, fall back to web Google Maps
       setTimeout(function () {
         if (Date.now() - start < 2000) {
           window.open(GOOGLE_URL, '_blank');
         }
       }, 1500);
+
     } else {
-      // Desktop / other: toggle the choice panel
-      panel.classList.toggle('hidden');
+      // Desktop: toggle choice panel with all three options
+      if (panel) panel.classList.toggle('hidden');
     }
   });
 
-  // Close panel when clicking anywhere else
+  // Close panel when clicking elsewhere
   document.addEventListener('click', function (e) {
-    if (!btn.contains(e.target) && !panel.contains(e.target)) {
+    if (panel && !btn.contains(e.target) && !panel.contains(e.target)) {
       panel.classList.add('hidden');
     }
   });
 
-  // Keyboard: close panel on Escape
+  // Close panel on Escape
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') panel.classList.add('hidden');
+    if (e.key === 'Escape' && panel) panel.classList.add('hidden');
   });
 })();

@@ -434,7 +434,7 @@ body { background: var(--black); color: var(--white); font-family: var(--font-bo
 @media (max-width: 768px) {
   :root { --nav-h: 70px; }
   .hamburger { display: flex; z-index: 10; }
-  .nav-links { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(10,10,10,.98); backdrop-filter: blur(20px); flex-direction: column; justify-content: center; align-items: center; gap: 2.5rem; transform: translateX(100%); transition: transform .4s var(--ease-out); z-index: 5; }
+  .nav-links { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(10,10,10,.98); backdrop-filter: blur(20px); flex-direction: column; justify-content: center; align-items: center; gap: 2rem; transform: translateX(100%); transition: transform .4s var(--ease-out); z-index: 5; padding-top: calc(var(--nav-h) + 2rem); overflow-y: auto; }
   .nav-links.open { transform: translateX(0); }
   .nav-link { font-size: 1rem; letter-spacing: .2em; }
   .nav-cta { padding: .75rem 2rem; }
@@ -458,3 +458,59 @@ body { background: var(--black); color: var(--white); font-family: var(--font-bo
 @media (min-width: 1800px) { :root { --container: 1500px; } body { font-size: 18px; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
 :focus-visible { outline: 2px solid var(--pink); outline-offset: 3px; }
+
+/* ══════════════════════════════════
+   MAP CHOICE PANEL & MOC UPDATES
+   (additions for universal maps)
+══════════════════════════════════ */
+
+/* Map app choice panel in location card */
+.map-choice-panel {
+  margin-top: 1rem;
+  background: var(--black);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.1rem;
+  animation: fade-up .3s var(--ease-out) both;
+}
+.map-choice-panel.hidden { display: none !important; }
+.mcp-label {
+  font-size: .68rem;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--white-60);
+  margin-bottom: .65rem;
+}
+.mcp-buttons { display: flex; flex-direction: column; gap: .5rem; }
+.mcp-btn {
+  display: flex; align-items: center; gap: .6rem;
+  padding: .6rem .9rem;
+  background: var(--black-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--white);
+  text-decoration: none;
+  font-size: .8rem;
+  font-family: var(--font-body);
+  font-weight: 300;
+  letter-spacing: .06em;
+  transition: border-color .25s, color .25s, background .25s;
+}
+.mcp-btn:hover { border-color: var(--pink); color: var(--pink); background: var(--pink-dim); }
+
+/* Map overlay card — updated for 3 buttons */
+.moc-map-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin-top: .25rem;
+}
+.moc-map-btns .btn {
+  flex: 1;
+  justify-content: center;
+  min-width: 80px;
+  font-size: .68rem;
+  padding: .55rem .75rem;
+  letter-spacing: .08em;
+}
+.moc-address { font-size: .82rem; color: var(--white-60); line-height: 1.6; }
