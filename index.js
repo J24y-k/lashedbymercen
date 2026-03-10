@@ -44,23 +44,33 @@ document.addEventListener('DOMContentLoaded', () => {
   // ──────────────────────────────────────────────────────────────────
   const hamburger = document.getElementById('hamburger');
   const navLinks  = document.getElementById('nav-links');
-  let scrollPosition = 0;
+
+  // iOS-safe scroll lock: save scroll position, fix body, restore on close
+  let _scrollY = 0;
+
+  function lockScroll() {
+    _scrollY = window.scrollY;
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${_scrollY}px`;
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function unlockScroll() {
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    document.body.style.overflow = '';
+    window.scrollTo(0, _scrollY);
+  }
 
   hamburger.addEventListener('click', () => {
     const isOpen = hamburger.classList.toggle('open');
     navLinks.classList.toggle('open', isOpen);
     hamburger.setAttribute('aria-expanded', isOpen.toString());
-    if (isOpen) {
-      scrollPosition = window.pageYOffset;
-      document.body.style.position = 'fixed';
-      document.body.style.top = `-${scrollPosition}px`;
-      document.body.style.width = '100%';
-    } else {
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
-      window.scrollTo(0, scrollPosition);
-    }
+    isOpen ? lockScroll() : unlockScroll();
   });
 
   // Close on link click
@@ -69,10 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
       hamburger.classList.remove('open');
       navLinks.classList.remove('open');
       hamburger.setAttribute('aria-expanded', 'false');
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
-      window.scrollTo(0, scrollPosition);
+      unlockScroll();
     });
   });
 
@@ -82,10 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
       hamburger.classList.remove('open');
       navLinks.classList.remove('open');
       hamburger.setAttribute('aria-expanded', 'false');
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
-      window.scrollTo(0, scrollPosition);
+      unlockScroll();
     }
   });
 
@@ -366,7 +370,7 @@ function initFallbackReveal() {
         observer.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+  }, { threshold: 0.05, rootMargin: '0px 0px 0px 0px' });
 
   revealEls.forEach(el => observer.observe(el));
 }

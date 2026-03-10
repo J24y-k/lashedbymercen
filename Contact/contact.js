@@ -42,18 +42,37 @@ document.addEventListener('DOMContentLoaded', () => {
   // ──────────────────────────────────────────────────────
   const hamburger = document.getElementById('hamburger');
   const navLinks  = document.getElementById('nav-links');
+  // iOS-safe scroll lock
+  let _scrollY = 0;
+  function lockScroll() {
+    _scrollY = window.scrollY;
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${_scrollY}px`;
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.overflow = 'hidden';
+  }
+  function unlockScroll() {
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    unlockScroll();
+    window.scrollTo(0, _scrollY);
+  }
+
   hamburger.addEventListener('click', () => {
     const isOpen = hamburger.classList.toggle('open');
     navLinks.classList.toggle('open', isOpen);
     hamburger.setAttribute('aria-expanded', isOpen.toString());
-    document.body.style.overflow = isOpen ? 'hidden' : '';
+    isOpen ? lockScroll() : unlockScroll();
   });
   navLinks.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', () => {
       hamburger.classList.remove('open');
       navLinks.classList.remove('open');
       hamburger.setAttribute('aria-expanded', 'false');
-      document.body.style.overflow = '';
+      unlockScroll();
     });
   });
   document.addEventListener('keydown', e => {
@@ -61,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
       hamburger.classList.remove('open');
       navLinks.classList.remove('open');
       hamburger.setAttribute('aria-expanded', 'false');
-      document.body.style.overflow = '';
+      unlockScroll();
     }
   });
 
