@@ -319,37 +319,6 @@ body {
 .nav-cta:hover { background: #ff85c2 !important; box-shadow: 0 0 25px rgba(255,105,180,.35); }
 .nav-cta::after { display: none; }
 
-.hamburger {
-  display: none;
-  flex-direction: column;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 5px;
-  gap: 4px;
-}
-
-.hamburger span {
-  display: block;
-  width: 25px;
-  height: 2px;
-  background: var(--text);
-  transition: all 0.3s var(--ease-smooth);
-  border-radius: 2px;
-}
-
-.hamburger[aria-expanded="true"] span:nth-child(1) {
-  transform: rotate(45deg) translate(6px, 6px);
-}
-
-.hamburger[aria-expanded="true"] span:nth-child(2) {
-  opacity: 0;
-}
-
-.hamburger[aria-expanded="true"] span:nth-child(3) {
-  transform: rotate(-45deg) translate(6px, -6px);
-}
-
 /* ── Hero ── */
 .hero {
   min-height: 100svh;
@@ -1164,43 +1133,99 @@ body {
 /* ══════════════════════════════════
    RESPONSIVE — MOBILE
 ══════════════════════════════════ */
-@media (max-width: 768px) {
-  :root { --nav-h: 70px; }
+/* ══════════════════════════════════
+   HAMBURGER
+══════════════════════════════════ */
 
-  /* Nav mobile */
- .mobile-menu {
-  position: fixed;
-  top: 80px;
-  left: 0;
-  right: 0;
-  background: rgba(10, 10, 10, 0.98);
-  backdrop-filter: blur(20px);
-  padding: 30px;
+.hamburger {
   display: none;
   flex-direction: column;
-  gap: 20px;
-  text-align: center;
-  border-bottom: 1px solid var(--border);
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  gap: 5px;
+  z-index: 1100;
 }
 
-.mobile-menu:not([hidden]) {
+.hamburger span {
+  width: 26px;
+  height: 2px;
+  background: var(--white);
+  border-radius: 2px;
+  transition: transform .35s var(--ease-out),
+              opacity .25s ease;
+}
+
+/* Animation */
+.hamburger[aria-expanded="true"] span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger[aria-expanded="true"] span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger[aria-expanded="true"] span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* ══════════════════════════════════
+   MOBILE MENU
+══════════════════════════════════ */
+
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  background: rgba(10,10,10,0.98);
+  backdrop-filter: blur(18px);
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1.6rem;
+  padding: 2rem;
+  text-align: center;
+  z-index: 1050;
+}
+
+.mobile-menu[hidden] {
+  display: none;
 }
 
 .mobile-menu a {
   font-size: 1.2rem;
-  font-weight: 600;
-  color: var(--text);
-  padding: 15px;
-  border-radius: 10px;
-  transition: all 0.3s var(--ease-smooth);
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--white);
+  transition: color .25s ease,
+              transform .25s ease;
 }
 
 .mobile-menu a:hover {
-  background: rgba(255, 23, 68, 0.1);
   color: var(--pink);
+  transform: translateY(-2px);
 }
 
+.mobile-menu .nav-cta {
+  margin-top: 1rem;
+  padding: .8rem 2.5rem;
+  border-radius: var(--radius);
+}
+
+/* ══════════════════════════════════
+   MOBILE BREAKPOINT
+══════════════════════════════════ */
+
+@media (max-width:768px){
+
+  .hamburger{
+    display:flex;
+  }
+  
+  :root { --nav-h: 70px; }
   .nav-links {
     position: fixed;
     top: 0;

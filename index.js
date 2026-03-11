@@ -39,49 +39,48 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('scroll', handleNavScroll, { passive: true });
   handleNavScroll();
 
-  // ──────────────────────────────────────────────────────────────────
-  // 3. MOBILE HAMBURGER MENU
-  // ──────────────────────────────────────────────────────────────────
-  function initMobileMenu() {
-  const hamburger = document.getElementById('hamburger');
-  const mobileMenu = document.getElementById('mobile-menu');
-  
-  if (!hamburger || !mobileMenu) return;
-  
-  hamburger.addEventListener('click', () => {
-    const isExpanded = hamburger.getAttribute('aria-expanded') === 'true';
-    hamburger.setAttribute('aria-expanded', String(!isExpanded));
-    mobileMenu.hidden = isExpanded;
-    
-    // FIXED: Better scroll lock for iOS/mobile
-    document.body.style.overflow = isExpanded ? '' : 'hidden';
-    document.body.style.position = isExpanded ? '' : 'fixed';
-    document.body.style.width = isExpanded ? '' : '100%';
+  // ─────────────────────────────────────────────────
+// MOBILE HAMBURGER MENU
+// ─────────────────────────────────────────────────
+function initMobileMenu(){
+
+  const hamburger = document.getElementById("hamburger");
+  const mobileMenu = document.getElementById("mobile-menu");
+
+  if(!hamburger || !mobileMenu) return;
+
+  const openMenu = () => {
+    hamburger.setAttribute("aria-expanded","true");
+    mobileMenu.hidden = false;
+
+    document.body.style.overflow = "hidden";
+  };
+
+  const closeMenu = () => {
+    hamburger.setAttribute("aria-expanded","false");
+    mobileMenu.hidden = true;
+
+    document.body.style.overflow = "";
+  };
+
+  hamburger.addEventListener("click", () => {
+    const expanded = hamburger.getAttribute("aria-expanded") === "true";
+
+    expanded ? closeMenu() : openMenu();
   });
-  
-  // Close menu when clicking links
-  mobileMenu.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => {
-      hamburger.setAttribute('aria-expanded', 'false');
-      mobileMenu.hidden = true;
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
-    });
+
+  mobileMenu.querySelectorAll("a").forEach(link=>{
+    link.addEventListener("click", closeMenu);
   });
-  
-  // Close menu on escape key
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !mobileMenu.hidden) {
-      hamburger.setAttribute('aria-expanded', 'false');
-      mobileMenu.hidden = true;
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
-    }
+
+  document.addEventListener("keydown",(e)=>{
+    if(e.key === "Escape") closeMenu();
   });
+
 }
 
+// CALL IT
+initMobileMenu();
 
   // ──────────────────────────────────────────────────────────────────
   // 4. BACK TO TOP BUTTON
