@@ -320,7 +320,6 @@ body { background: var(--black); color: var(--white); font-family: var(--font-bo
   top: var(--nav-h);
   left: 0;
   right: 0;
-  bottom: 0;
   background: rgba(10, 10, 10, 0.98);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -330,10 +329,8 @@ body { background: var(--black); color: var(--white); font-family: var(--font-bo
   gap: 0.5rem;
   text-align: center;
   border-bottom: 1px solid var(--border);
-  z-index: 1050;
-  overflow-y: auto;
+  z-index: 1200;
 }
-
 .mobile-menu:not([hidden]) {
   display: flex;
 }
