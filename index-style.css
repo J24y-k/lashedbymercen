@@ -334,6 +334,10 @@ body {
   background: var(--white);
   transition: all .3s var(--ease-out);
 }
+.hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
 
 /* ── Hero ── */
 .hero {
@@ -1153,7 +1157,7 @@ body {
   :root { --nav-h: 70px; }
 
   /* Nav mobile */
-  .hamburger { display: flex; z-index: 10; }
+  .hamburger { display: flex; z-index: 1100; position: relative; }
   .nav-links {
     position: fixed;
     top: 0;

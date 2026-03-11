@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('scroll', handleNavScroll, { passive: true });
   handleNavScroll();
 
-  // ──────────────────────────────────────────────────────
+    // ──────────────────────────────────────────────────────
   // 3. HAMBURGER MENU
   // ──────────────────────────────────────────────────────
   const hamburger = document.getElementById('hamburger');
@@ -60,6 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
       document.body.style.overflow = '';
     }
   });
+
 
   // ──────────────────────────────────────────────────────
   // 4. BACK TO TOP

@@ -618,7 +618,7 @@ body {
 @media (max-width: 768px) {
   :root { --nav-h: 70px; }
 
-  .hamburger { display: flex; z-index: 10; }
+  .hamburger { display: flex; z-index: 1100; position: relative; }
   .nav-links {
     position: fixed;
     top: 0;

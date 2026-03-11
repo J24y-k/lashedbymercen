@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ── HAMBURGER ──
   const hamburger = document.getElementById('hamburger');
   const navLinks  = document.getElementById('nav-links');
+
   hamburger.addEventListener('click', () => {
     const open = hamburger.classList.toggle('open');
     navLinks.classList.toggle('open', open);

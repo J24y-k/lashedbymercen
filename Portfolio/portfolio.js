@@ -37,11 +37,12 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('scroll', handleNavScroll, { passive: true });
   handleNavScroll();
 
-  // ──────────────────────────────────────────────────────
+   // ──────────────────────────────────────────────────────
   // 3. HAMBURGER
   // ──────────────────────────────────────────────────────
   const hamburger = document.getElementById('hamburger');
   const navLinks  = document.getElementById('nav-links');
+
   hamburger.addEventListener('click', () => {
     const isOpen = hamburger.classList.toggle('open');
     navLinks.classList.toggle('open', isOpen);
