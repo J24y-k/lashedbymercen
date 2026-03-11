@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('scroll', handleNavScroll, { passive: true });
   handleNavScroll();
 
-  /// ──────────────────────────────────────────────────────────────────
+  // ──────────────────────────────────────────────────────────────────
   // 3. MOBILE HAMBURGER MENU
   // ──────────────────────────────────────────────────────────────────
   const hamburger = document.getElementById('hamburger');
@@ -69,19 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
       navLinks.classList.remove('open');
       hamburger.setAttribute('aria-expanded', 'false');
       document.body.style.overflow = '';
-    }
-  });
-
-  // Close on ESC
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && navLinks.classList.contains('open')) {
-      hamburger.classList.remove('open');
-      navLinks.classList.remove('open');
-      hamburger.setAttribute('aria-expanded', 'false');
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
-      window.scrollTo(0, scrollPosition);
     }
   });
 
@@ -362,7 +349,7 @@ function initFallbackReveal() {
         observer.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+  }, { threshold: 0.05, rootMargin: '0px 0px 0px 0px' });
 
   revealEls.forEach(el => observer.observe(el));
 }
