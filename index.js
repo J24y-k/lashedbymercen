@@ -39,28 +39,17 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('scroll', handleNavScroll, { passive: true });
   handleNavScroll();
 
-  // ──────────────────────────────────────────────────────────────────
+  /// ──────────────────────────────────────────────────────────────────
   // 3. MOBILE HAMBURGER MENU
   // ──────────────────────────────────────────────────────────────────
   const hamburger = document.getElementById('hamburger');
   const navLinks  = document.getElementById('nav-links');
-  let scrollPosition = 0;
 
   hamburger.addEventListener('click', () => {
     const isOpen = hamburger.classList.toggle('open');
     navLinks.classList.toggle('open', isOpen);
     hamburger.setAttribute('aria-expanded', isOpen.toString());
-    if (isOpen) {
-      scrollPosition = window.pageYOffset;
-      document.body.style.position = 'fixed';
-      document.body.style.top = `-${scrollPosition}px`;
-      document.body.style.width = '100%';
-    } else {
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
-      window.scrollTo(0, scrollPosition);
-    }
+    document.body.style.overflow = isOpen ? 'hidden' : '';
   });
 
   // Close on link click
@@ -69,11 +58,18 @@ document.addEventListener('DOMContentLoaded', () => {
       hamburger.classList.remove('open');
       navLinks.classList.remove('open');
       hamburger.setAttribute('aria-expanded', 'false');
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
-      window.scrollTo(0, scrollPosition);
+      document.body.style.overflow = '';
     });
+  });
+
+  // Close on ESC
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && navLinks.classList.contains('open')) {
+      hamburger.classList.remove('open');
+      navLinks.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
   });
 
   // Close on ESC
