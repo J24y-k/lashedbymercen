@@ -31,35 +31,43 @@ document.addEventListener('DOMContentLoaded', () => {
   handleNavScroll();
 
     // ──────────────────────────────────────────────────────
-  // 3. HAMBURGER MENU
+  // 3. MOBILE MENU
   // ──────────────────────────────────────────────────────
-  const hamburger = document.getElementById('hamburger');
-  const navLinks  = document.getElementById('nav-links');
+  function initMobileMenu() {
+    const hamburger  = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobile-menu');
+    if (!hamburger || !mobileMenu) return;
 
-  hamburger.addEventListener('click', () => {
-    const isOpen = hamburger.classList.toggle('open');
-    navLinks.classList.toggle('open', isOpen);
-    hamburger.setAttribute('aria-expanded', isOpen.toString());
-    document.body.style.overflow = isOpen ? 'hidden' : '';
-  });
-
-  navLinks.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('click', () => {
-      hamburger.classList.remove('open');
-      navLinks.classList.remove('open');
-      hamburger.setAttribute('aria-expanded', 'false');
-      document.body.style.overflow = '';
+    hamburger.addEventListener('click', () => {
+      const isExpanded = hamburger.getAttribute('aria-expanded') === 'true';
+      hamburger.setAttribute('aria-expanded', String(!isExpanded));
+      mobileMenu.hidden = isExpanded;
+      document.body.style.overflow   = isExpanded ? '' : 'hidden';
+      document.body.style.position   = isExpanded ? '' : 'fixed';
+      document.body.style.width      = isExpanded ? '' : '100%';
     });
-  });
 
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && navLinks.classList.contains('open')) {
-      hamburger.classList.remove('open');
-      navLinks.classList.remove('open');
-      hamburger.setAttribute('aria-expanded', 'false');
-      document.body.style.overflow = '';
-    }
-  });
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.setAttribute('aria-expanded', 'false');
+        mobileMenu.hidden = true;
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.width    = '';
+      });
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && !mobileMenu.hidden) {
+        hamburger.setAttribute('aria-expanded', 'false');
+        mobileMenu.hidden = true;
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.width    = '';
+      }
+    });
+  }
+  initMobileMenu();
 
 
   // ──────────────────────────────────────────────────────

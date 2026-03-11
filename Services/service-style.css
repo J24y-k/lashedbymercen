@@ -480,3 +480,50 @@ body { background: var(--black); color: var(--white); font-family: var(--font-bo
 @media (min-width: 1800px) { :root { --container: 1500px; } body { font-size: 18px; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
 :focus-visible { outline: 2px solid var(--pink); outline-offset: 3px; }
+
+/* ── MOBILE MENU ── */
+.mobile-menu {
+  position: fixed;
+  top: var(--nav-h);
+  left: 0;
+  right: 0;
+  background: rgba(10, 10, 10, 0.98);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 2rem 1.5rem;
+  display: none;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  z-index: 1200;
+}
+.mobile-menu:not([hidden]) {
+  display: flex;
+}
+.mobile-menu .nav-link {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--light-grey);
+  padding: 1rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+.mobile-menu .nav-link:hover,
+.mobile-menu .nav-link.active {
+  background: rgba(255, 105, 180, 0.08);
+  color: var(--pink);
+}
+.mobile-menu .nav-cta {
+  margin-top: 0.5rem;
+  border: 1px solid var(--pink);
+  color: var(--pink);
+}
+.mobile-menu .nav-cta:hover {
+  background: var(--pink);
+  color: var(--black);
+}
