@@ -106,7 +106,7 @@
 
 /* HAMBURGER */
 .hamburger {
-  display: flex;
+  display: none;
   flex-direction: column;
   justify-content: center;
   background: none;
@@ -144,11 +144,11 @@
   bottom: 0;
   background: rgba(10,10,10,0.98);
   backdrop-filter: blur(18px);
-  display: flex;
+  display: none;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 100vdh;
+  min-height: 100dvh;
   gap: 1.6rem;
   padding: 2rem;
   text-align: center;
@@ -170,6 +170,7 @@
 
 @media (max-width:768px){
   .hamburger{ display:flex; }
+  .mobile-menu { display: flex; }
   :root { --nav-h: 70px; }
   .nav-links {
     position: fixed;
