@@ -49,18 +49,29 @@ function initMobileMenu(){
 
   if(!hamburger || !mobileMenu) return;
 
+  let savedScrollY = 0;
+
   const openMenu = () => {
+    savedScrollY = window.scrollY || 0;
+    
     hamburger.setAttribute("aria-expanded","true");
     mobileMenu.hidden = false;
 
-    document.body.style.overflow = "hidden";
+    document.documentElement.classList.add('no-scroll');
+
+    document.documentElement.classList.add('menu-open');
   };
 
   const closeMenu = () => {
     hamburger.setAttribute("aria-expanded","false");
     mobileMenu.hidden = true;
 
-    document.body.style.overflow = "";
+    document.documentElement.classList.remove('no-scroll');
+
+    // restore scroll position (prevents jump on some devices)
+    window.scrollTo(0, savedScrollY);
+
+    document.documentElement.classList.remove('menu-open');
   };
 
   hamburger.addEventListener("click", () => {

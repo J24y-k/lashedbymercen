@@ -47,6 +47,22 @@ body {
   overflow-x: hidden;
 }
 
+/* Scroll-lock to avoid viewport-height reflow on mobile when menu open */
+.no-scroll {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  width: 100%;
+}
+
+/* When menu open, remove transforms/backdrop filters from header so fixed menu behaves consistently */
+.menu-open .nav-wrap {
+  transform: none !important;
+  will-change: auto !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
 /* Grain texture overlay */
 .grain {
   position: fixed;
@@ -251,6 +267,7 @@ body {
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
 }
+
 .nav {
   display: flex;
   align-items: center;
@@ -1138,7 +1155,7 @@ body {
 ══════════════════════════════════ */
 
 .hamburger {
-  display: none;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   background: none;
@@ -1146,7 +1163,7 @@ body {
   cursor: pointer;
   padding: 6px;
   gap: 5px;
-  z-index: 1100;
+  z-index: 2100;
 }
 
 .hamburger span {
@@ -1178,16 +1195,25 @@ body {
 .mobile-menu {
   position: fixed;
   inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: rgba(10,10,10,0.98);
   backdrop-filter: blur(18px);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  min-height: 100vdh;
   gap: 1.6rem;
   padding: 2rem;
   text-align: center;
-  z-index: 1050;
+  z-index: 2000;
+
+  /* Prevent scrolling on mobile */
+  overscroll-behavior: contain;
+  touch-action: none;
 }
 
 .mobile-menu[hidden] {
