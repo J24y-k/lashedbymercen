@@ -45,6 +45,7 @@
 
   <!-- ── Stylesheet ── -->
   <link rel="stylesheet" href="booking-style.css" />
+  <link rel="stylesheet" href="../navbar.css" />
 
   <!-- ── Schema: ReservationAction ── -->
   <script type="application/ld+json">
@@ -103,7 +104,7 @@
         <span class="logo-mark">✦</span>
         <span class="logo-text">Lashed <em>By Mercen</em></span>
       </a>
-      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
         <span></span><span></span><span></span>
       </button>
       <ul class="nav-links" id="nav-links" role="list">
@@ -115,16 +116,16 @@
         <li><a href="booking.html" class="nav-link nav-cta active-cta">Book Now</a></li>
       </ul>
     </nav>
-  </header>
 
-  <div id="mobile-menu" hidden>
-    <a href="../index.html" class="nav-link">Home</a>
-    <a href="../About/about.html" class="nav-link">About</a>
-    <a href="../Services/service.html" class="nav-link">Services</a>
-    <a href="../Portfolio/portfolio.html" class="nav-link">Portfolio</a>
-    <a href="../Contact/contact.html" class="nav-link">Contact</a>
-    <a href="booking.html" class="nav-link nav-cta">Book Now</a>
-  </div>
+    <div id="mobile-menu" class="mobile-menu" hidden>
+      <a href="../index.html" class="nav-link">Home</a>
+      <a href="../About/about.html" class="nav-link">About</a>
+      <a href="../Services/service.html" class="nav-link">Services</a>
+      <a href="../Portfolio/portfolio.html" class="nav-link">Portfolio</a>
+      <a href="../Contact/contact.html" class="nav-link">Contact</a>
+      <a href="booking.html" class="nav-link nav-cta">Book Now</a>
+    </div>
+  </header>
 
   <main id="main-content">
 
@@ -827,6 +828,7 @@
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 15V5M5 10l5-5 5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
   </button>
 
-  <script src="booking.js"></script>
+  <script src="../navbar.js" defer></script>
+  <script src="booking.js" defer></script>
 </body>
 </html>

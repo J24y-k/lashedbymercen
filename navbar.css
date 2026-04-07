@@ -134,6 +134,11 @@
   transform: rotate(-45deg) translate(5px, -5px);
 }
 
+/* Make sure the hamburger (close icon) sits above the mobile overlay when open */
+.hamburger[aria-expanded="true"] {
+  z-index: 3000;
+}
+
 /* MOBILE MENU */
 .mobile-menu {
   position: fixed;

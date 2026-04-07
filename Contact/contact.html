@@ -45,6 +45,7 @@
 
   <!-- ── Stylesheet ── -->
   <link rel="stylesheet" href="contact-style.css" />
+  <link rel="stylesheet" href="../navbar.css" />
 
   <!-- ── Schema: ContactPage + LocalBusiness ── -->
   <script type="application/ld+json">
@@ -107,7 +108,7 @@
         <span class="logo-mark">✦</span>
         <span class="logo-text">Lashed <em>By Mercen</em></span>
       </a>
-      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
         <span></span><span></span><span></span>
       </button>
       <ul class="nav-links" id="nav-links" role="list">
@@ -118,17 +119,17 @@
         <li><a href="contact.html" class="nav-link active">Contact</a></li>
         <li><a href="../Booking/booking.html" class="nav-link nav-cta">Book Now</a></li>
       </ul>
+
+      <div id="mobile-menu" class="mobile-menu" hidden>
+        <a href="../index.html" class="nav-link">Home</a>
+        <a href="../About/about.html" class="nav-link">About</a>
+        <a href="../Services/service.html" class="nav-link">Services</a>
+        <a href="../Portfolio/portfolio.html" class="nav-link">Portfolio</a>
+        <a href="contact.html" class="nav-link active">Contact</a>
+        <a href="../Booking/booking.html" class="nav-link nav-cta">Book Now</a>
+      </div>
     </nav>
   </header>
-
-  <div id="mobile-menu" hidden>
-    <a href="../index.html" class="nav-link">Home</a>
-    <a href="../About/about.html" class="nav-link">About</a>
-    <a href="../Services/service.html" class="nav-link">Services</a>
-    <a href="../Portfolio/portfolio.html" class="nav-link">Portfolio</a>
-    <a href="contact.html" class="nav-link active">Contact</a>
-    <a href="../Booking/booking.html" class="nav-link nav-cta">Book Now</a>
-  </div>
 
   <main id="main-content">
 
@@ -538,6 +539,7 @@
     <span class="wa-bubble-pulse" aria-hidden="true"></span>
   </a>
 
-  <script src="contact.js"></script>
+  <script src="../navbar.js" defer></script>
+  <script src="contact.js" defer></script>
 </body>
 </html>
